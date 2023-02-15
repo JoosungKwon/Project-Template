@@ -1,6 +1,6 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '2.7.7'
+	id 'org.springframework.boot' version '2.7.8'
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
 	id 'org.asciidoctor.jvm.convert' version '3.3.2'
 }
@@ -24,27 +24,40 @@ ext {
 }
 
 dependencies {
-	//Spring Boot Starter
+	// Spring Boot Starter
+	// WEB
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	// Security
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+	testImplementation 'org.springframework.security:spring-security-test'
+	// DB
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
-
+	// Test & Config
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.springframework.security:spring-security-test'
-	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
-
-	// flyway
+	// Flyway
 	implementation 'org.flywaydb:flyway-core'
 	implementation 'org.flywaydb:flyway-mysql'
-	// lombok
+	// Lombok
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	//MySQL Driver
 	runtimeOnly 'com.mysql:mysql-connector-j'
+	//H2 Driver
+	runtimeOnly 'com.h2database:h2'
+	// RestDocs API SPEC
+	testImplementation 'com.epages:restdocs-api-spec-mockmvc:0.16.2'
+	// Swagger UI
+	swaggerUI 'org.webjars:swagger-ui:4.11.1'
+	// JWT
+	implementation 'com.auth0:java-jwt:4.2.1'
+}
+
+asciidoctor.doFirst {
+	delete file('src/main/resources/static/docs')
 }
 
 tasks.named('test') {
