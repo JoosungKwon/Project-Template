@@ -1,8 +1,13 @@
+import org.hidetake.gradle.swagger.generator.GenerateSwaggerUI
+import org.springframework.boot.gradle.tasks.bundling.BootJar
+
 plugins {
 	id 'java'
 	id 'org.springframework.boot' version '2.7.8'
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
 	id 'org.asciidoctor.jvm.convert' version '3.3.2'
+	id 'org.hidetake.swagger.generator' version '2.18.2'
+	id 'com.epages.restdocs-api-spec' version '0.16.2'
 }
 
 group = 'com.prgrms'
@@ -10,6 +15,7 @@ version = '1.0.0'
 sourceCompatibility = '17'
 
 configurations {
+	asciidoctorExt
 	compileOnly {
 		extendsFrom annotationProcessor
 	}
@@ -21,6 +27,20 @@ repositories {
 
 ext {
 	set('snippetsDir', file("build/generated-snippets"))
+}
+
+swaggerSources {
+	sample {
+		setInputFile(file("${project.buildDir}/api-spec/openapi3.yaml"))
+	}
+}
+
+openapi3 {
+	setServer("http://localhost:8080") // OAS(Swagger) 서버 설정
+	title = "restdocs-swagger API Documentation"
+	description = "Spring REST Docs with SwaggerUI."
+	version = "1.0.0"
+	format = "yaml"
 }
 
 dependencies {
@@ -68,4 +88,32 @@ tasks.named('test') {
 tasks.named('asciidoctor') {
 	inputs.dir snippetsDir
 	dependsOn test
+}
+
+tasks.withType(GenerateSwaggerUI).configureEach {
+	dependsOn 'openapi3'
+}
+
+tasks.named('asciidoctor') {
+	inputs.dir snippetsDir
+	dependsOn test
+}
+
+tasks.register('copySwaggerUI', Copy) {
+	dependsOn 'generateSwaggerUISample'
+
+	def generateSwaggerUISampleTask = tasks.named('generateSwaggerUISample', GenerateSwaggerUI).get()
+
+	from("${generateSwaggerUISampleTask.outputDir}")
+	into("${project.buildDir}/resources/main/static/docs/api/.")
+}
+
+task copyDocument(type: Copy) {
+	dependsOn asciidoctor
+	from file("build/docs/asciidoc")
+	into file("src/main/resources/static/docs")
+}
+
+tasks.withType(BootJar).configureEach {
+	dependsOn 'copySwaggerUI'
 }
