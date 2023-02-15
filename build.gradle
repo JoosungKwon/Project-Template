@@ -64,6 +64,7 @@ dependencies {
 	// Lombok
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
+	annotationProcessor "org.projectlombok:lombok-mapstruct-binding:0.2.0" // Lombok - MapStruct
 	//MySQL Driver
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	//H2 Driver
@@ -74,6 +75,10 @@ dependencies {
 	swaggerUI 'org.webjars:swagger-ui:4.11.1'
 	// JWT
 	implementation 'com.auth0:java-jwt:4.2.1'
+
+	// MapStruct
+	implementation 'org.mapstruct:mapstruct:1.5.3.Final'
+	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
 }
 
 asciidoctor.doFirst {
