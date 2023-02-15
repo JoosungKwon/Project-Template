@@ -1,0 +1,35 @@
+spring:
+  config:
+    import: optional:file:.env[.properties]
+  profiles:
+    include:
+      - security
+      - aws
+
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:test;MODE=MySQL;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=false;
+    username: sa
+    password:
+
+  sql:
+    init:
+      schema-locations: classpath:schema.sql
+
+  jpa:
+    database: h2
+    generate-ddl: false
+    open-in-view: false
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: true
+
+  flyway:
+    enabled: false
+
+jwt:
+  expiry-seconds: 2

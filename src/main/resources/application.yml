@@ -1,0 +1,21 @@
+spring:
+  profiles:
+    active:
+      - prod
+    group:
+      local:
+        - db-local
+      prod:
+        - db-prod
+
+    include:
+      - db
+      - exception
+      - security
+      - aws
+
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: '*'
