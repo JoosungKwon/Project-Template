@@ -1,0 +1,14 @@
+-- V1__init.sql
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS SAMPLE_ENTITY;
+
+CREATE TABLE users
+(
+    id          bigint    NOT NULL PRIMARY KEY AUTO_INCREMENT
+);
+
+CREATE TABLE SAMPLE_ENTITY
+(
+    id          bigint    NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    name       varchar(200) NULL
+);
