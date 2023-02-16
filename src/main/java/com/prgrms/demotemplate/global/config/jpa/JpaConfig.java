@@ -1,4 +1,4 @@
-package com.prgrms.demotemplate.global.config;
+package com.prgrms.demotemplate.global.config.jpa;
 
 import java.util.Optional;
 

@@ -1,4 +1,4 @@
-package com.prgrms.demotemplate.global.config;
+package com.prgrms.demotemplate.global.config.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

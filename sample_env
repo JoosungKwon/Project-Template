@@ -1,7 +1,7 @@
 # datasource
 # SPRING_DATASOURCE_USERNAME=root
 # SPRING_DATASOURCE_PASSWORD=team-r
-# SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3306/prolog
+# SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3306/test
 
 # security
 # JWT_ISSUER=[토큰_발행자_정보]

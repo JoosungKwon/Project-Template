@@ -1,4 +1,4 @@
-package com.prgrms.demotemplate.global.common;
+package com.prgrms.demotemplate.global.common.domain;
 
 import java.time.LocalDateTime;
 
@@ -6,7 +6,6 @@ import javax.persistence.Column;
 import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
 
-import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -28,10 +27,6 @@ public abstract class BaseEntity {
 	@LastModifiedDate
 	@Column(name = "updated_at")
 	private LocalDateTime updatedAt;
-
-	@CreatedBy
-	@Column(name = "created_by")
-	private String createdBy;
 
 	private boolean deleted;
 }
