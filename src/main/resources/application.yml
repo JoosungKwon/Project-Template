@@ -14,8 +14,25 @@ spring:
       - security
       - aws
 
+  web:
+    resources:
+      add-mappings: true
+
+
+server:
+  shutdown: graceful
+  port: 8080
+
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: true
 #management:
 #  endpoints:
 #    web:
 #      exposure:
 #        include: '*'
+
+
+
+

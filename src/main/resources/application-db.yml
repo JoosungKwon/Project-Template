@@ -44,6 +44,11 @@ spring:
     activate.on-profile: "db-local"
     import: optional:file:.env[.properties]
 
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.type.descriptor.sql: trace
+
 --- # prod
 spring:
   config:
