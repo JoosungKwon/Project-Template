@@ -15,7 +15,6 @@ version = '1.0.0'
 sourceCompatibility = '17'
 
 configurations {
-	asciidoctorExt
 	compileOnly {
 		extendsFrom annotationProcessor
 	}
@@ -36,7 +35,7 @@ swaggerSources {
 }
 
 openapi3 {
-	setServer("http://localhost:8080") // OAS(Swagger) 서버 설정
+	setServer("http://localhost:8080") // Swagger 서버 설정
 	title = "restdocs-swagger API Documentation"
 	description = "Spring REST Docs with SwaggerUI."
 	version = "1.0.0"
@@ -64,7 +63,7 @@ dependencies {
 	// Lombok
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
-	annotationProcessor "org.projectlombok:lombok-mapstruct-binding:0.2.0" // Lombok - MapStruct
+	annotationProcessor "org.projectlombok:lombok-mapstruct-binding:0.2.0" // lombok 에서 mapstruct binding 해주는 기능
 	//MySQL Driver
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	//H2 Driver
@@ -75,14 +74,11 @@ dependencies {
 	swaggerUI 'org.webjars:swagger-ui:4.11.1'
 	// JWT
 	implementation 'com.auth0:java-jwt:4.2.1'
-
 	// MapStruct
 	implementation 'org.mapstruct:mapstruct:1.5.3.Final'
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
-}
-
-asciidoctor.doFirst {
-	delete file('src/main/resources/static/docs')
+	// p6spy
+	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.1'
 }
 
 tasks.named('test') {
@@ -95,13 +91,12 @@ tasks.named('asciidoctor') {
 	dependsOn test
 }
 
-tasks.withType(GenerateSwaggerUI).configureEach {
-	dependsOn 'openapi3'
+asciidoctor.doFirst {
+	delete file('src/main/resources/static/docs')
 }
 
-tasks.named('asciidoctor') {
-	inputs.dir snippetsDir
-	dependsOn test
+tasks.withType(GenerateSwaggerUI).configureEach {
+	dependsOn 'openapi3'
 }
 
 tasks.register('copySwaggerUI', Copy) {
