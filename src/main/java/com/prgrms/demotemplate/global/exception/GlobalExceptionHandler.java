@@ -14,13 +14,20 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
-import com.prgrms.demotemplate.global.common.ErrorResponse;
+import com.prgrms.demotemplate.global.common.dto.ErrorResponse;
+import com.prgrms.demotemplate.global.utils.MessageUtil;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+	private static final String EXCEPTION_FORMAT = "[EXCEPTION]                   -----> ";
+	private static final String EXCEPTION_MESSAGE_FORMAT = "[EXCEPTION] EXCEPTION_MESSAGE -----> [{}]";
+	private static final String EXCEPTION_TYPE_FORMAT = "[EXCEPTION] EXCEPTION_TYPE    -----> [{}]";
+	private static final String EXCEPTION_REQUEST_URI = "[EXCEPTION] REQUEST_URI       -----> [{}]";
+	private static final String EXCEPTION_HTTP_METHOD_TYPE = "[EXCEPTION] HTTP_METHOD_TYPE  -----> [{}]";
 
 	@ResponseStatus(BAD_REQUEST)
 	@ExceptionHandler(MethodArgumentNotValidException.class)
@@ -54,24 +61,24 @@ public class GlobalExceptionHandler {
 	}
 
 	@ResponseStatus(BAD_REQUEST)
-	@ExceptionHandler(EntityNotFoundException.class)
+	@ExceptionHandler(ServiceException.class)
+	public ErrorResponse handleServiceException(HttpServletRequest request, ServiceException e) {
+		logDebug(request, e);
+		return ErrorResponse.from(BAD_REQUEST.name(), MessageUtil.getMessage(e.getMessage()));
+	}
+
+	@ResponseStatus(BAD_REQUEST)
+	@ExceptionHandler(EntityNotFoundException.class) // JPA 오류
 	public ErrorResponse handleEntityNotFoundException(EntityNotFoundException e) {
 		logWarn(e);
 		return ErrorResponse.from(BAD_REQUEST.name(), e.getMessage());
 	}
 
 	@ResponseStatus(BAD_REQUEST)
-	@ExceptionHandler(IllegalArgumentException.class)
+	@ExceptionHandler(IllegalArgumentException.class) // 예상하지 못한 내부 로직 오류
 	public ErrorResponse handleIllegalArgumentException(IllegalArgumentException e) {
 		logWarn(e);
 		return ErrorResponse.from(BAD_REQUEST.name(), e.getMessage());
-	}
-
-	@ResponseStatus(INTERNAL_SERVER_ERROR)
-	@ExceptionHandler(IllegalStateException.class)
-	public ErrorResponse handleIllegalStateException(IllegalStateException e) {
-		logWarn(e);
-		return ErrorResponse.from(INTERNAL_SERVER_ERROR.name(), e.getMessage());
 	}
 
 	@ResponseStatus(INTERNAL_SERVER_ERROR)
@@ -82,21 +89,21 @@ public class GlobalExceptionHandler {
 	}
 
 	private void logDebug(HttpServletRequest request, Exception e) {
-		log.debug("[EXCEPTION] REQUEST_URI       -----> [{}]", request.getRequestURI());
-		log.debug("[EXCEPTION] HTTP_METHOD_TYPE  -----> [{}]", request.getMethod());
-		log.debug("[EXCEPTION] EXCEPTION_TYPE    -----> [{}]", e.getClass().getSimpleName());
-		log.debug("[EXCEPTION] EXCEPTION_MESSAGE -----> [{}]", e.getMessage());
+		log.debug(EXCEPTION_REQUEST_URI, request.getRequestURI());
+		log.debug(EXCEPTION_HTTP_METHOD_TYPE, request.getMethod());
+		log.debug(EXCEPTION_TYPE_FORMAT, e.getClass().getSimpleName());
+		log.debug(EXCEPTION_MESSAGE_FORMAT, e.getMessage());
 	}
 
 	private void logWarn(Exception e) {
-		log.warn("[EXCEPTION] EXCEPTION_TYPE    -----> [{}]", e.getClass().getSimpleName());
-		log.warn("[EXCEPTION] EXCEPTION_MESSAGE -----> [{}]", e.getMessage());
+		log.warn(EXCEPTION_TYPE_FORMAT, e.getClass().getSimpleName());
+		log.warn(EXCEPTION_MESSAGE_FORMAT, e.getMessage());
 	}
 
 	private void logError(Exception e) {
-		log.error("[EXCEPTION] EXCEPTION_TYPE    -----> [{}]", e.getClass().getSimpleName());
-		log.error("[EXCEPTION] EXCEPTION_MESSAGE -----> [{}]", e.getMessage());
-		log.error("[EXCEPTION]                   -----> ", e);
+		log.error(EXCEPTION_TYPE_FORMAT, e.getClass().getSimpleName());
+		log.error(EXCEPTION_MESSAGE_FORMAT, e.getMessage());
+		log.error(EXCEPTION_FORMAT, e);
 	}
 }
 
