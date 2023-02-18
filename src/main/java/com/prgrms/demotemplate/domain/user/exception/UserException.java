@@ -1,9 +1,9 @@
 package com.prgrms.demotemplate.domain.user.exception;
 
-import com.prgrms.demotemplate.global.exception.ServiceRuntimeException;
+import com.prgrms.demotemplate.global.exception.ServiceException;
 
 
-public class UserException extends ServiceRuntimeException {
+public class UserException extends ServiceException {
 
 	private static final String MESSAGE_KEY = "error.user";
 

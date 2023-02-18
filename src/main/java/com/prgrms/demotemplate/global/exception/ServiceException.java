@@ -3,7 +3,7 @@ package com.prgrms.demotemplate.global.exception;
 import lombok.Getter;
 
 @Getter
-public abstract class ServiceRuntimeException extends RuntimeException {
+public abstract class ServiceException extends RuntimeException {
 
 	protected static final String DOT = ".";
 
@@ -11,7 +11,7 @@ public abstract class ServiceRuntimeException extends RuntimeException {
 
 	private final Object[] params;
 
-	protected ServiceRuntimeException(String messageKey, Object[] params) {
+	protected ServiceException(String messageKey, Object[] params) {
 		this.messageKey = messageKey;
 		this.params = params;
 	}
